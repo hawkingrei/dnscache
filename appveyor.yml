@@ -1,0 +1,24 @@
+
+environment:
+  GOPATH: c:\gopath
+
+branches:
+  only:
+    - master
+
+
+install:
+  - rmdir c:\go /s /q
+  - appveyor DownloadFile https://storage.googleapis.com/golang/go1.7.5.windows-amd64.msi
+  - msiexec /i go1.7.5.windows-amd64.msi /q
+  - go version
+  - go env
+  - appveyor DownloadFile http://sourceforge.netcologne.de/project/gnuwin32/tar/1.13-1/tar-1.13-1-bin.zip -FileName tar.zip
+  - 7z x tar.zip bin/tar.exe
+  - set PATH=bin/;%PATH%
+
+build_script:
+  - go get -d -v github.com/hawkingrei/g53
+  - cd c:\gopath\src\github.com\hawkingrei\g53
+  - go test -v ./...
+  - go build 
